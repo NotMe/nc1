@@ -1,0 +1,42 @@
+services:
+  frontend-for-test-app:
+    build: ./frontend
+    container_name: frontend-for-test-app
+    ports:
+      - 3000:3000
+    depends_on:
+      - nc-one-back
+    networks:
+      - nc-one-network
+
+  nc-one-back:
+    build: ./backend
+    container_name: nc-one-back
+    ports:
+      - 3001:3000
+    volumes:
+      - ./static:/usr/src/app/static
+    depends_on:
+      - mysql
+    networks:
+      - nc-one-network
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./backend/src/database:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - nc-one-network
+
+networks:
+  nc-one-network:
+    driver: bridge
