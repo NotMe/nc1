@@ -6,8 +6,8 @@ services:
       - 443:443
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/cert/key.pem:/root/ssl/key.pem
-      - ./nginx/cert/cert.pem:/root/ssl/cert.pem
+      - ./nginx/key.pem:/root/ssl/key.pem
+      - ./nginx/cert.pem:/root/ssl/cert.pem
     depends_on:
       - frontend-for-test-app
     networks:
